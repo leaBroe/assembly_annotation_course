@@ -39,6 +39,9 @@ run_kmer_counting() {
     OUTPUT_FILE="${OUTPUT_PREFIX}_${SAMPLENAME1}_${SAMPLENAME2}.jf"
     
     jellyfish count -C -m 19 -s 5G -t 4 -o "$OUTPUT_FILE" <(zcat "$FILE1") <(zcat "$FILE2")
+    
+    # Run jellyfish histo for the current pair of files
+    jellyfish histo -t 10 "${OUTPUT_FILE}" > "${OUTPUT_FILE}_histo"
   done
 }
 
@@ -56,12 +59,3 @@ run_kmer_counting "$pacbio_input_dir" "$pacbio_output_prefix"
 rnaseq_input_dir="${READ_DIR}/RNAseq" 
 rnaseq_output_prefix="${OUTPUT_DIR}/rnaseq_reads"
 run_kmer_counting "$rnaseq_input_dir" "$rnaseq_output_prefix"
-
-# Run jellyfish histo for Illumina
-jellyfish histo -t 10 "${illumina_output_prefix}_*.jf" > "${illumina_output_prefix}_histo"
-
-# Run jellyfish histo for PacBio
-jellyfish histo -t 10 "${pacbio_output_prefix}_*.jf" > "${pacbio_output_prefix}_histo"
-
-# Run jellyfish histo for RNAseq
-jellyfish histo -t 10 "${rnaseq_output_prefix}_*.jf" > "${rnaseq_output_prefix}_histo"
