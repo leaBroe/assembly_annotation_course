@@ -26,12 +26,19 @@ run_kmer_counting() {
   
   FILES=("$INPUT_DIR"/*.fastq.gz)
   
-  for FILE in "${FILES[@]}"; do
-    FILENAME=$(basename "$FILE")
-    SAMPLENAME="${FILENAME%%.*}"
-    OUTPUT_FILE="${OUTPUT_PREFIX}_${SAMPLENAME}.jf"
+  for ((i = 0; i < ${#FILES[@]}; i += 2)); do
+    FILE1="${FILES[i]}"
+    FILE2="${FILES[i + 1]}"
     
-    jellyfish count -C -m 19 -s 5G -t 4 -o "$OUTPUT_FILE" <(zcat "$FILE")
+    FILENAME1=$(basename "$FILE1")
+    FILENAME2=$(basename "$FILE2")
+    
+    SAMPLENAME1="${FILENAME1%%.*}"
+    SAMPLENAME2="${FILENAME2%%.*}"
+    
+    OUTPUT_FILE="${OUTPUT_PREFIX}_${SAMPLENAME1}_${SAMPLENAME2}.jf"
+    
+    jellyfish count -C -m 19 -s 5G -t 4 -o "$OUTPUT_FILE" <(zcat "$FILE1") <(zcat "$FILE2")
   done
 }
 
@@ -50,7 +57,11 @@ rnaseq_input_dir="${READ_DIR}/RNAseq"
 rnaseq_output_prefix="${OUTPUT_DIR}/rnaseq_reads"
 run_kmer_counting "$rnaseq_input_dir" "$rnaseq_output_prefix"
 
-# Run jellyfish histo
-jellyfish histo -t 10 "${illumina_output_prefix}_${SAMPLENAME}.jf" > "${illumina_output_prefix}_${SAMPLENAME}.histo"
-jellyfish histo -t 10 "${pacbio_output_prefix}_${SAMPLENAME}.jf" > "${pacbio_output_prefix}_${SAMPLENAME}.histo"
-jellyfish histo -t 10 "${rnaseq_output_prefix}_${SAMPLENAME}.jf" > "${rnaseq_output_prefix}_${SAMPLENAME}.histo"
+# Run jellyfish histo for Illumina
+jellyfish histo -t 10 "${illumina_output_prefix}_*.jf" > "${illumina_output_prefix}_histo"
+
+# Run jellyfish histo for PacBio
+jellyfish histo -t 10 "${pacbio_output_prefix}_*.jf" > "${pacbio_output_prefix}_histo"
+
+# Run jellyfish histo for RNAseq
+jellyfish histo -t 10 "${rnaseq_output_prefix}_*.jf" > "${rnaseq_output_prefix}_histo"
