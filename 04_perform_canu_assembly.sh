@@ -12,7 +12,7 @@
 # Canu configuration
 maxThreads=16
 maxMemory=64
-gridEngineResourceOption="--cpus-per-task=THREADS --mem-per-cpu=MEMORY"
+gridEngineResourceOption="--cpus-per-task=$maxThreads --mem-per-cpu=${maxMemory}G"
 gridOptions="--partition=pall --mail-user=lea.broennimann@students.unibe.ch"
 
 module load UHTS/Assembler/canu/2.1.1;
@@ -47,7 +47,7 @@ run_canu_assembly() {
     mkdir -p "$OUTPUT_SUBDIR"
     
     # Run Canu assembly for the current pair of files
-    canu -p "$SAMPLENAME1" genomeSize=5g -d "$OUTPUT_SUBDIR" gridOptions="${gridOptions}" "${gridEngineResourceOption}" -pacbio "$FILE1" "$FILE2"
+    canu -p "$SAMPLENAME1" genomeSize=133725193 -d "$OUTPUT_SUBDIR" $gridOptions $gridEngineResourceOption -pacbio "$FILE1" "$FILE2"
   done
 }
 
