@@ -42,7 +42,7 @@ run_flye_assembly() {
     mkdir -p "$OUTPUT_SUBDIR"
     
     # Run Flye assembly for the current pair of files
-    flye --threads 16 --genome-size 5g --out-dir "$OUTPUT_SUBDIR" --pacbio-raw "$FILE1" "$FILE2"
+    flye --threads 16 --genome-size 133725193 --out-dir "$OUTPUT_SUBDIR" --pacbio-raw "$FILE1" "$FILE2"
   done
 }
 
