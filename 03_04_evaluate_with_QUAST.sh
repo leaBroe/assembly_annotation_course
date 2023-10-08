@@ -3,11 +3,11 @@
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=48G
 #SBATCH --time=06:00:00
-#SBATCH --job-name=QUAST_evaluation
-#SBATCH --mail-user=sabrina.rasch@students.unibe.ch
+#SBATCH --job-name=QUAST_canu
+#SBATCH --mail-user=lea.broennimann@students.unibe.ch
 #SBATCH --mail-type=begin,end,fail
-#SBATCH --output=/data/users/srasch/assembly_course/Output/output_QUAST_evaluation_%j.o
-#SBATCH --error=/data/users/srasch/assembly_course/Error/error_QUAST_evaluation_%j.e
+#SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/evaluation/quast_logs/output_QUAST_evaluation_%j.o
+#SBATCH --error=/data/users/lbroennimann/assembly_annotation_course/evaluation/quast_logs/error_QUAST_evaluation_%j.e
 #SBATCH --partition=pall
 
 ### Run this script 4 times.
@@ -24,9 +24,9 @@
     # assembly_name=flye
 
 #Specify directory structure and create them
-    course_dir=/data/users/srasch/assembly_course
-        raw_data_dir=${course_dir}/RawData
-        polish_evaluation_dir=${course_dir}/03_polish_evaluation
+    course_dir=/data/users/lbroennimann/assembly_annotation_course
+        raw_data_dir=${course_dir}/participant_3
+        polish_evaluation_dir=${course_dir}/assembly_validation/bowtie2/03_polish_evaluation
             evaulation_dir=${polish_evaluation_dir}/evaluation
             # evaulation_dir=${polish_evaluation_dir}/evaluation_no_polish #Use this instead of the upper one when analysing the not polished assemblies
                 QUAST_dir=${evaulation_dir}/QUAST
