@@ -3,7 +3,7 @@
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=48G
 #SBATCH --time=06:00:00
-#SBATCH --job-name=flye_unp_BUSCO_evaluation
+#SBATCH --job-name=trinity_BUSCO_evaluation
 #SBATCH --mail-user=lea.broennimann@students.unibe.ch
 #SBATCH --mail-type=begin,end,fail
 #SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/evaluation/busco_logs/output_BUSCO_evaluation_%j.o
@@ -22,8 +22,8 @@
 
 #Specify name of assembly (!!!COMMENT OUT THE ONE YOU ARE NOT USING!!!)
     #assembly_name=canu
-    assembly_name=flye
-    #assembly_name=trinity
+    #assembly_name=flye
+    assembly_name=trinity
 
 
 #Specify directory structure and create them
@@ -42,8 +42,8 @@
     #assembly=${polish_evaluation_dir}/polish/pilon/canu/canu.fasta #Polished canu assembly
     #assembly=${course_dir}/assembly/canu/pacbio_assemblies/ERR3415819_ERR3415820_canu/ERR3415819.contigs.fasta #Unpolished canu assembly
     # assembly=${polish_evaluation_dir}/polish/pilon/flye/flye.fasta #Polished flye assembly
-    assembly=${course_dir}/assembly/flye/pacbio_assemblies/ERR3415819_ERR3415820_assembly/assembly.fasta #Unpolished flye assembly
-    # assembly=${course_dir}/02_assembly/trinity/Trinity.fasta #Unpolished trinity assembly -> but is in evaulation folder
+    #assembly=${course_dir}/assembly/flye/pacbio_assemblies/ERR3415819_ERR3415820_assembly/assembly.fasta #Unpolished flye assembly
+    assembly=${course_dir}/assembly/RNAseq_assemblies/SRR1584462_2_trinity_assembly/Trinity.fasta #Unpolished trinity assembly -> but is in evaulation folder
 
 #Go to folder where the evaluation results will be stored
     cd ${assembly_BUSCO_dir}
@@ -53,7 +53,7 @@
     export AUGUSTUS_CONFIG_PATH=./augustus_config
 
 #Run busco to assess the quality of the assemblies
-    busco -i ${assembly} -l brassicales_odb10 -o ${assembly_name} -m genome --cpu 8
+    busco -i ${assembly} -l brassicales_odb10 -o ${assembly_name} -m genome --cpu 8 -f
         #Options entered here are:
             #"-i": Input sequence file in FASTA format. Can be an assembled genome or transcriptome (DNA), or protein sequences from an annotated gene set.
             #"-l": Specify the name of the BUSCO lineage to be used.
