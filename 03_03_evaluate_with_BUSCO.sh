@@ -3,7 +3,7 @@
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=48G
 #SBATCH --time=06:00:00
-#SBATCH --job-name=trinity_BUSCO_evaluation
+#SBATCH --job-name=BUSCO_evaluation
 #SBATCH --mail-user=lea.broennimann@students.unibe.ch
 #SBATCH --mail-type=begin,end,fail
 #SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/evaluation/busco_logs/output_BUSCO_evaluation_%j.o
