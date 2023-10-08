@@ -39,12 +39,7 @@ run_trinity_assembly() {
     mkdir -p "$OUTPUT_SUBDIR"
     
     # Run Trinity assembly for the current file
-    Trinity \
-      --seqType fq \
-      --single "$FILE" \
-      --CPU 12 \
-      --max_memory 48G \
-      --output "$OUTPUT_SUBDIR"
+    Trinity --seqType fq --left ${READ_DIR}/RNAseq/*_1.fastq.gz --right ${READ_DIR}/RNAseq/*_2.fastq.gz --SS_lib_type FR --CPU 6 --max_memory 20G --output ${OUTPUT_SUBDIR}
   done
 }
 
