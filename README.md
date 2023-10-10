@@ -2,6 +2,14 @@
 
 This is a project of the course *Genome and Transcriptome Assembly* (473637-HS2023) of the University of Bern. It takes place in the Fall Semester 2023. The course webpage can be found [here](https://docs.pages.bioinformatics.unibe.ch/assembly-annotation-course/).
 
+The primary goal is to conduct a comprehensive assembly and annotation using whole genome NGS data from Arabidopsis thaliana.
+
+**Objectives:**
+1) Understand the theoretical principles behind algorithmic assembly.
+2) Implement these principles on data from both model and non-model organisms.
+3) Evaluate the quality throughout the entire process, from data production to the genome/transcriptome assembly.
+4) Annotate the genome by aligning the transcriptome assembly data with the genome assembly data.
+
 
 Path to my project folder on the IBU cluster: **/data/users/lbroennimann/assembly_annotation_course**
 
