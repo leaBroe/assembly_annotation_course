@@ -13,13 +13,17 @@
 ### Run this script 2 times.
 #1. assembly_name=canu; assembly=${polish_evaluation_dir}/polish/pilon/canu/canu.fasta
 #2. assembly_name=flye; assembly=${polish_evaluation_dir}/polish/pilon/flye/flye.fasta
+#3. assembly_name=compare; assembly=${course_dir}/02_assembly/canu/canu.contigs.fasta; reference=${course_dir}/02_assembly/flye/assembly.fasta;               match_file=${assembly_nucmer_dir}/compare.delta
 
 #Add the modules
     module add UHTS/Analysis/mummer/4.0.0beta1
+    export PATH=/software/bin:$PATH
 
 #Specify name of assembly (!!!COMMENT OUT THE ONE YOU ARE NOT USING!!!)
-    assembly_name=canu
-    # assembly_name=flye
+    # assembly_name=canu
+    assembly_name=flye
+    # assembly_name=compare
+
 
 #Specify directory structure and create them
     course_dir=/data/users/lbroennimann/assembly_annotation_course
@@ -36,15 +40,16 @@
 
 #Specify the assembly to use (!!!COMMENT OUT THE ONE YOU ARE NOT USING!!!)
     assembly=${polish_evaluation_dir}/polish/pilon/canu/canu.fasta
-    # assembly=${polish_evaluation_dir}/polish/pilon/flye/flye.fasta
+    #assembly=${polish_evaluation_dir}/polish/pilon/flye/flye.fasta
 
 #Specify the reference genome
-    reference=${course_dir}/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa
-
+    #reference=${course_dir}/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa
+    reference=${course_dir}/assembly/flye/pacbio_assemblies/ERR3415819_ERR3415820_assembly/assembly.fasta
 
 #Specify the delta file to use (!!!COMMENT OUT THE ONE YOU ARE NOT USING!!!)
-    match_file=${assembly_nucmer_dir}/canu.delta #Not sure if this is right yet. Have to run nucmer first and see what the output is.
-    # match_file=${assembly_nucmer_dir}/flye.delta #Not sure if this is right yet. Have to run nucmer first and see what the output is.
+    #match_file=${assembly_nucmer_dir}/canu.delta #Not sure if this is right yet. Have to run nucmer first and see what the output is.
+    #match_file=${assembly_nucmer_dir}/flye.delta #Not sure if this is right yet. Have to run nucmer first and see what the output is.
+    match_file=/data/users/lbroennimann/assembly_annotation_course/comparison/nucmer/compare/compare.delta
 
 #Run mummerplot to show results
     mummerplot -f -l -R ${reference} -Q ${assembly} --large --png ${match_file}
