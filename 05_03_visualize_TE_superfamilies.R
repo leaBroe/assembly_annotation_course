@@ -1,10 +1,15 @@
 # load packages
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+#if (!require("BiocManager", quietly = TRUE))
+  #install.packages("BiocManager")
 
-BiocManager::install("rtracklayer")
+#BiocManager::install("rtracklayer")
 
 library(rtracklayer)
+
+# Load the RColorBrewer package for better color palettes
+#if (!require("RColorBrewer", quietly = TRUE))
+  #install.packages("RColorBrewer")
+library(RColorBrewer)
 
 round_millions <- function(num){
   return(ceiling(num/1e+06)*1e+06)
@@ -52,19 +57,36 @@ for(clade in clades){
 }
 
 pdf(paste0('TEs_by_Clades_and_Range_-_', largest_scaff, '.pdf'), width = max_bin + 2, height = 6)
-# par(mfrow = c(1, 2))
 
-# Replace grey.colors with sample to generate random colors for each clade
-colors <- sample(rainbow(num_clades), num_clades)
+par(mar = c(7, 4.5, 5, 2.5))
 
-barplot(clades_bins, beside = F, col = colors, border = "grey", xlab = "Range (start position)", ylab = "Frequency", main = paste0("TEs by Clades and Range - ", largest_scaff))
-legend('topright', legend=clades, fill=colors)
 
-# Replace grey.colors with sample to generate random colors for each bin
-colors <- sample(rainbow(max_bin), max_bin)
+# Choose a color palette. If there are more clades than colors in the palette, 
+# the palette colors will be repeated.
+colors_clades <- brewer.pal(min(8, num_clades), "Set3")
+if(num_clades > 8) {
+  colors_clades <- colorRampPalette(colors_clades)(num_clades)
+}
 
-barplot(t(clades_bins), beside = T, col = colors, border = "grey", xlab = "Clade", ylab = "Frequency", main = paste0("TEs by Clades and Range - ", largest_scaff))
-legend('topright', legend=bin_strings, fill=colors)
+barplot(clades_bins, beside = F, col = colors_clades, border = "white", 
+        xlab = "Range (start position)", ylab = "Frequency", 
+        main = paste0("TEs by Clades and Range - ", largest_scaff),
+        cex.names=0.8, las=1) 
+legend('topright', legend=clades, fill=colors_clades, cex=0.8, bty="n", inset=c(0.1, 0.05))
+
+# For the second plot, choose another color palette
+colors_bins <- brewer.pal(min(8, max_bin), "Paired")
+if(max_bin > 8) {
+  colors_bins <- colorRampPalette(colors_bins)(max_bin)
+}
+
+barplot(t(clades_bins), beside = T, col = colors_bins, border = "white", ylab = "Frequency", 
+        main = paste0("TEs by Clades and Range - ", largest_scaff),
+        cex.names=0.8, las=2) 
+
+mtext("Clade", side = 1, line = 5)  # Adjust the 'line' value as needed
+
+legend('topright', legend=bin_strings, fill=colors_bins, cex=0.8, bty="n", inset=c(0.1, 0.05))
 
 dev.off()
 
