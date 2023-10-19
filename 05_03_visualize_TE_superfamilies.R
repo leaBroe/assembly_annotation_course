@@ -1,5 +1,9 @@
 # load packages
-install.packages('rtracklayer')
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("rtracklayer")
+
 library(rtracklayer)
 
 round_millions <- function(num){
@@ -7,7 +11,7 @@ round_millions <- function(num){
 }
 
 # Load merged assembly GFF and convert it to a data frame
-gff_path <- './pilon_bt2_flye.fasta.mod.EDTA.TEanno.gff3'
+gff_path <- '/Users/leabroennimann/Desktop/Master_Bioinformatik/3._Semester/organization_annotation_eukaryte_genomes/polished.fasta.mod.EDTA.TEanno.gff3'
 # Load GFF and convert it to a data frame
 gff <- rtracklayer::import(gff_path)
 gff_df <- as.data.frame(gff)
