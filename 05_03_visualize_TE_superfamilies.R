@@ -54,11 +54,15 @@ for(clade in clades){
 pdf(paste0('TEs_by_Clades_and_Range_-_', largest_scaff, '.pdf'), width = max_bin + 2, height = 6)
 # par(mfrow = c(1, 2))
 
-colors <- grey.colors(length(seq(1, num_clades)))
+# Replace grey.colors with sample to generate random colors for each clade
+colors <- sample(rainbow(num_clades), num_clades)
+
 barplot(clades_bins, beside = F, col = colors, border = "grey", xlab = "Range (start position)", ylab = "Frequency", main = paste0("TEs by Clades and Range - ", largest_scaff))
 legend('topright', legend=clades, fill=colors)
 
-colors <- grey.colors(length(seq(1, max_bin)))
+# Replace grey.colors with sample to generate random colors for each bin
+colors <- sample(rainbow(max_bin), max_bin)
+
 barplot(t(clades_bins), beside = T, col = colors, border = "grey", xlab = "Clade", ylab = "Frequency", main = paste0("TEs by Clades and Range - ", largest_scaff))
 legend('topright', legend=bin_strings, fill=colors)
 
