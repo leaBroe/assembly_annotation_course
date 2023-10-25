@@ -26,7 +26,6 @@ cd ${output_dir}
 perl ${script_dir}/parseRM.pl -i ${input_dir} -l 50,1 -v
 
 # Modify the output file $genome.mod.out.landscape.Div.Rname.tab by removing the first and the 3rd line:
-
 output_dir_2=${course_dir}/polished.fasta.mod.EDTA.anno
 
 cd ${output_dir}
