@@ -7,10 +7,11 @@ library(ggplot2)
 library(cowplot)
 
 ## set working directory
-setwd("/media/Data/manuel/EDTA/TE_dating")
+# setwd("/media/Data/manuel/EDTA/TE_dating")
 
 ## Import the modified output from parseRM.pl ending with "landscape.Div.Rname.tab
-dat <- fread("Austriaca_review4.FINAL_top9_Syri.fa.mod.out.landscape.Div.Rname.tab_R")
+dat <- fread("/Users/leabroennimann/Desktop/Master_Bioinformatik/3._Semester/organization_annotation_eukaryte_genomes/polished.fasta.mod.out.landscape.Div.Rname.tab")
+
 colnames(dat) <- c("Rname", "Rclass", "Rfam", 1:50)
 dat <- dat %>%
     separate(Rname, into = c("TE", "Num"), sep = "_") %>%
