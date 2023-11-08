@@ -29,21 +29,18 @@ gff3_merge -d ${base}_master_datastore_index.log -o ${output_tag}.all.maker.gff
 gff3_merge -d ${base}_master_datastore_index.log -n -o ${output_tag}.all.maker.noseq.gff
 fasta_merge -d ${base}_master_datastore_index.log -o ${output_tag}
 
-# cd ${base}.maker.output
+protein=${output_tag}.all.maker.proteins.fasta
+transcript=${output_tag}.all.maker.transcripts.fasta
+gff=${output_tag}.all.maker.noseq.gff
+prefix=${output_tag}_
 
-# protein=${base}.all.maker.proteins.fasta
-# transcript=${base}.all.maker.transcripts.fasta
-# gff=${base}.all.maker.noseq.gff
-# prefix=${base}_
+cp $gff ${gff}.renamed.gff
+cp $protein ${protein}.renamed.fasta
+cp $transcript ${transcript}.renamed.fasta
 
-# cp $gff ${gff}.renamed.gff
-# cp $protein ${protein}.renamed.fasta
-# cp $transcript ${transcript}.renamed.fasta
-
-# maker_map_ids --prefix $prefix --justify 7 {gff}.renamed.gff >
-# ${base}.id.map
-# map_gff_ids ${base}.id.map {gff}.renamed.gff
-# map_fasta_ids ${base}.id.map ${protein}.renamed.fasta
-# map_fasta_ids ${base}.id.map ${transcript}.renamed.fasta
+maker_map_ids --prefix $prefix --justify 7 ${gff}.renamed.gff > ${base}.id.map
+map_gff_ids ${base}.id.map ${gff}.renamed.gff
+map_fasta_ids ${base}.id.map ${protein}.renamed.fasta
+map_fasta_ids ${base}.id.map ${transcript}.renamed.fasta
 
 
