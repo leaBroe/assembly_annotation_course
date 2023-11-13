@@ -42,7 +42,7 @@
             #"-i": Input sequence file in FASTA format. Can be an assembled genome or transcriptome (DNA), or protein sequences from an annotated gene set.
             #"-l": Specify the name of the BUSCO lineage to be used.
             #"-o": defines the folder that will contain all results, logs, and intermediate data
-            #"-m": Specify which BUSCO analysis mode to run, genome, proteins, transcriptome (!!!FOR THE CANU AND FLYE ASSEMBLY I USE GENOME AND FOR THE TRINITRY ASSEMBLY I USE TRANSCRIPTOME!!!)
+            #"-m": Specify which BUSCO analysis mode to run, genome, proteins, transcriptome 
             #"-c": Specify the number (N=integer) of threads/cores to use.
 
 #Remove the augustus config directory again
