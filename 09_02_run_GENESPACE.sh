@@ -14,6 +14,4 @@ course_dir=/data/users/lbroennimann/assembly_annotation_course
 genespace_image=${course_dir}/scripts/genespace_1.1.4.sif
 genespace_script=${course_dir}/scripts/genespace.R
 
-apptainer exec \
---bind ${course_dir} \
-${genespace_image} Rscript ${genespace_script}
+apptainer exec --bind ${course_dir} ${genespace_image} Rscript ${genespace_script}
