@@ -1,44 +1,76 @@
 #!/usr/bin/env bash
 
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=500M
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
 #SBATCH --time=20:00:00
-#SBATCH --job-name=GENESPACE_input
+#SBATCH --job-name=genesp_bed
 #SBATCH --mail-user=lea.broennimann@students.unibe.ch
 #SBATCH --mail-type=begin,end
-#SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/MAKER/logs/output_GENESPACE_input_%j.o
-#SBATCH --error=/data/users/lbroennimann/assembly_annotation_course/MAKER/logs/error_GENESPACE_input_%j.e
+#SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/MAKER/logs/bed_GENESPACE_input_%j.o
+#SBATCH --error=/data/users/lbroennimann/assembly_annotation_course/MAKER/logs/bed_error_GENESPACE_input_%j.e
 #SBATCH --partition=pall
 
-### Run this script X times.
 
 module add UHTS/Analysis/SeqKit/0.13.2
 
-#Specify directory structure and create them
-    course_dir=/data/users/lbroennimann/assembly_annotation_course
-        input_dir=${course_dir}/MAKER/run_mpi.maker.output
-        GENESPACE_dir=${course_dir}/09_genespace
-            bed_dir=${GENESPACE_dir}/bed
-            peptide_dir=${GENESPACE_dir}/peptide
+# Define output and input directories
+course_dir=/data/users/lbroennimann/assembly_annotation_course
 
-    mkdir ${GENESPACE_dir}
-    mkdir ${bed_dir}
-    mkdir ${peptide_dir}
+# Input dir
+# input_dir=${course_dir}/MAKER/run_mpi.maker.output
+input_dir=/data/courses/assembly-annotation-course/CDS_annotation/Genespace
 
-#Specify the assembly to use
-    genome="MAKER_flye_annot"
+# Output dirs
+out_dir=${course_dir}/8_comparative_genomics
+mkdir ${out_dir}
+bed_dir=${out_dir}/bed
+mkdir ${bed_dir}
+peptide_dir=${out_dir}/peptide
+mkdir ${peptide_dir}
 
-#Get all contings and sort them by size
-    awk '$3=="contig"' ${input_dir}/${genome}.all.maker.noseq.gff.renamed.gff|sort -t $'\t' -r -k5,5n > ${GENESPACE_dir}/size_sorted_contigs.txt
+# Loop over all datasets (only consider files, not folders)
+for gff_file_path in ${input_dir}/*noseq*renamed*gff; do
+if [[ -f ${gff_file_path} ]]; then
 
-#Get the 10 longest
-    tail ${GENESPACE_dir}/size_sorted_contigs.txt|cut -f1 > ${GENESPACE_dir}/contigs.txt
+    # Define the base name of the files (accession/dataset)
+    gff_file=$(basename ${gff_file_path})
+    base=${gff_file%.all*}
+    # base=Ler_3_maker
+    # Input gff
+    gff=${gff_file_path}
+    # gff=${input_dir}/${base}.all.maker.noseq*renamed.gff
+    # Input fasta
+    fasta=${input_dir}/${base}*proteins*renamed*fasta
 
-#Create bed file
-    awk '$3=="mRNA"' ${input_dir}/${genome}.all.maker.noseq.gff.renamed.gff|cut -f 1,4,5,9|sed 's/ID=//'|sed 's/;.\+//'|grep -w -f ${GENESPACE_dir}/contigs.txt > ${bed_dir}/C24.bed
+    # Intermediate output files
+    out_contigs=${out_dir}/${base}_longest_contigs.txt
+    out_gene_IDs=${out_dir}/${base}_gene_IDs.txt
+    # Output bed
+    out_bed=${bed_dir}/${base}.bed
+    # Output peptide
+    out_peptide=${peptide_dir}/${base}.fa
 
-#Get the gene IDs
-    cut -f4 ${bed_dir}/C24.bed > ${GENESPACE_dir}/gene_IDs.txt
+    # Filter the gff for the third field ($3) "type" == "contig"; sort them in reverse order (-r) based on the fifth field ($5) "width" numerically (-n)
+    # cat ${gff} | awk '$3=="contig"' | sort -t $'\t' -k5 -n -r | head -n 10 > ${out_contigs}
+    cat ${gff} | awk '$3=="contig"' | sort -t $'\t' -k5 -n -r | cut -f 1,4,5,9 | sed 's/ID=//' | sed 's/;.\+//' | head -n 10 > ${out_contigs}
 
-#Create fasta file
-    cat ${input_dir}/${genome}.all.maker.proteins.fasta.renamed.fasta|seqkit grep -r -f ${GENESPACE_dir}/gene_IDs.txt |seqkit seq -i > ${peptide_dir}/C24.fa
+    # -t $'\t': Specifies the field separator as a tab character (\t).
+    # -k5: Sorts based on the fifth field ($5)
+    # -n: sorts numerically (not alphabetically).
+    # -r: Sorts the lines in reverse order.
+
+    #Create bed file
+    cat ${gff} | awk '$3=="mRNA"' | cut -f 1,4,5,9 | sed 's/ID=//' | sed 's/;.\+//' | grep -w -f <(cut -f1 ${out_contigs}) > ${out_bed}
+
+    #Get the gene IDs
+    cut -f4 ${out_bed} > ${out_gene_IDs}
+
+    #Create fasta file
+    cat ${fasta} | seqkit grep -r -f ${out_gene_IDs} | seqkit seq -i > ${out_peptide}
+
+fi
+done
+
+# Copy the reference files to the directory for genespace
+cp ${course_dir}/references/TAIR10.bed ${bed_dir} 
+cp ${course_dir}/references/TAIR10.fa ${peptide_dir}
