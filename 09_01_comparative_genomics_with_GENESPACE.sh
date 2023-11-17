@@ -72,5 +72,5 @@ fi
 done
 
 # Copy the reference files to the directory for genespace
-cp ${course_dir}/references/TAIR10.bed ${bed_dir} 
-cp ${course_dir}/references/TAIR10.fa ${peptide_dir}
+cp /data/users/lbroennimann/assembly_annotation_course/MAKER/CDS_annotation/Genespace/TAIR10.bed ${bed_dir} 
+cp /data/users/lbroennimann/assembly_annotation_course/MAKER/CDS_annotation/Genespace/TAIR10.fa ${peptide_dir}
