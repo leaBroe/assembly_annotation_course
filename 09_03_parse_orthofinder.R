@@ -88,6 +88,7 @@ ogroups_presence_absence[genomes] <- ogroups_presence_absence[genomes] == 1
 ## plot data using the ComplexUpset package
 library(ComplexUpset)
 
-pdf(paste0(plot_dir, "/one-to-one_orthogroups_plot.complexupset.pdf", height = 5, width = 10, useDingbats = FALSE))
+pdf(paste0(plot_dir, "/one-to-one_orthogroups_plot.pdf", height = 5, width = 10, useDingbats = FALSE))
 upset(ogroups_presence_absence, genomes, name = "genre", width_ratio = 0.1, wrap = TRUE, set_sizes = FALSE)
 dev.off()
+
