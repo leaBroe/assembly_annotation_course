@@ -4,7 +4,7 @@
 #SBATCH --mem-per-cpu=4000M
 #SBATCH --time=03:00:00
 #SBATCH --job-name=fastqc
-#SBATCH --mail-user=lea.broennimann@gmail.com
+#SBATCH --mail-user=lea.broennimann@students.unibe.ch
 #SBATCH --mail-type=begin,end
 #SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/read_QC/fastqc/logs/output_fastqc_%j.o
 #SBATCH --error=/data/users/lbroennimann/assembly_annotation_course/read_QC/fastqc/logs/error_fastqc_%j.e
