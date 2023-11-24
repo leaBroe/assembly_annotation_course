@@ -17,8 +17,8 @@ module add UHTS/Analysis/SeqKit/0.13.2
 course_dir=/data/users/lbroennimann/assembly_annotation_course
 
 # Input dir
-input_dir=${course_dir}/MAKER/run_mpi.maker.output
-# input_dir=/data/courses/assembly-annotation-course/CDS_annotation/Genespace
+#input_dir=${course_dir}/MAKER/run_mpi.maker.output
+input_dir=/data/courses/assembly-annotation-course/CDS_annotation/Genespace
 
 # Output dirs
 out_dir=${course_dir}/8_comparative_genomics

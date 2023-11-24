@@ -6,40 +6,36 @@
 #SBATCH --job-name=BUSCO_evaluation
 #SBATCH --mail-user=lea.broennimann@students.unibe.ch
 #SBATCH --mail-type=begin,end,fail
-#SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/evaluation/busco_logs/output_BUSCO_evaluation_%j.o
-#SBATCH --error=/data/users/lbroennimann/assembly_annotation_course/evaluation/busco_logs/error_BUSCO_evaluation_%j.e
+#SBATCH --output=/data/users/lbroennimann/assembly_annotation_course/data_from_paper/output_BUSCO_evaluation_%j.o
+#SBATCH --error=/data/users/lbroennimann/assembly_annotation_course/data_from_paper/error_BUSCO_evaluation_%j.e
 #SBATCH --partition=pall
 
-#Add the modules
+# Load required modules
 module add UHTS/Analysis/busco/4.1.4
 
+# Define variables
+ASSEMBLY_NAME="assembly_from_paper"
+BUSCO_DIR="/data/users/lbroennimann/assembly_annotation_course/data_from_paper/BUSCO"
+ASSEMBLY_PATH="/data/users/lbroennimann/assembly_annotation_course/data_from_paper/C24.chr.all.v2.0.fasta" # C24 assembly from the paper
+AUGUSTUS_CONFIG_PATH="/software/SequenceAnalysis/GenePrediction/augustus/3.3.3.1/config"
+BUSCO_LINEAGE="brassicales_odb10"
+BUSCO_MODE="genome" # Change to 'transcriptome' for Trinity assembly
+CPU_COUNT=8
 
-assembly_name=assembly_from_paper
+# Create BUSCO directory for the assembly
+mkdir -p "${BUSCO_DIR}/${ASSEMBLY_NAME}" || exit 1
 
+# Change to the BUSCO directory
+cd "${BUSCO_DIR}/${ASSEMBLY_NAME}" || exit 1
 
-assembly_BUSCO_dir=/data/users/lbroennimann/assembly_annotation_course/data_from_paper/BUSCO/${assembly_name}
+# Copy AUGUSTUS config directory to a writable location
+cp -r "${AUGUSTUS_CONFIG_PATH}" ./augustus_config
+export AUGUSTUS_CONFIG_PATH=$(pwd)/augustus_config
 
-mkdir ${assembly_BUSCO_dir}
+# Run BUSCO for assembly quality assessment
+busco -i "${ASSEMBLY_PATH}" -l ${BUSCO_LINEAGE} -o "${ASSEMBLY_NAME}" -m ${BUSCO_MODE} --cpu ${CPU_COUNT} -f
 
+# Clean up: Remove the AUGUSTUS config directory
+rm -rf ./augustus_config
 
-assembly=/data/users/lbroennimann/assembly_annotation_course/data_from_paper/C24.chr.all.v2.0.fasta #C24 assembly from the paper
-
-#Go to folder where the evaluation results will be stored
-    cd ${assembly_BUSCO_dir}
-
-#Make a copy of the augustus config directory to a location where I have write permission
-    cp -r /software/SequenceAnalysis/GenePrediction/augustus/3.3.3.1/config augustus_config
-    export AUGUSTUS_CONFIG_PATH=./augustus_config
-
-#Run busco to assess the quality of the assemblies
-    busco -i ${assembly} -l brassicales_odb10 -o ${assembly_name} -m genome --cpu 8 -f
-        #Options entered here are:
-            #"-i": Input sequence file in FASTA format. Can be an assembled genome or transcriptome (DNA), or protein sequences from an annotated gene set.
-            #"-l": Specify the name of the BUSCO lineage to be used.
-            #"-o": defines the folder that will contain all results, logs, and intermediate data
-            #"-m": Specify which BUSCO analysis mode to run, genome, proteins, transcriptome (!!!FOR THE CANU AND FLYE ASSEMBLY I USE GENOME AND FOR THE TRINITRY ASSEMBLY I USE TRANSCRIPTOME!!!)
-            #"--cpu": Specify the number (N=integer) of threads/cores to use.
-
-#Remove the augustus config directory again
-    rm -r ./augustus_config
 
