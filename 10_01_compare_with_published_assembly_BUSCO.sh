@@ -12,11 +12,14 @@
 
 # Load required modules
 module add UHTS/Analysis/busco/4.1.4
-
 # Define variables
-ASSEMBLY_NAME="assembly_from_paper"
+#ASSEMBLY_NAME="assembly_from_paper"
+ASSEMBLY_NAME="flye_polished_mfaye"
+
 BUSCO_DIR="/data/users/lbroennimann/assembly_annotation_course/data_from_paper/BUSCO"
-ASSEMBLY_PATH="/data/users/lbroennimann/assembly_annotation_course/data_from_paper/C24.chr.all.v2.0.fasta" # C24 assembly from the paper
+#ASSEMBLY_PATH="/data/users/lbroennimann/assembly_annotation_course/data_from_paper/C24.chr.all.v2.0.fasta" # C24 assembly from the paper
+ASSEMBLY_PATH="/data/users/mfaye/assembly_course/data/assemblies/flye_out/polished.fasta"
+
 AUGUSTUS_CONFIG_PATH="/software/SequenceAnalysis/GenePrediction/augustus/3.3.3.1/config"
 BUSCO_LINEAGE="brassicales_odb10"
 BUSCO_MODE="genome" # Change to 'transcriptome' for Trinity assembly
